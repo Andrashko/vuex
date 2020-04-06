@@ -6,7 +6,6 @@
     <bookTable v-bind:bookList="filtredBooks" @remove="removeBook" @update="showUpdateBookForm"></bookTable>
 
     <bookForm v-model="book" v-bind:visible="formVisible" @input="formInput"></bookForm>
-    
   </div>
 </template>
 
@@ -103,6 +102,16 @@ export default {
       }
     },
 
+    async getBookById(id){
+      try{
+        let resp = await axios.get(`http://localhost:5000/book/${id}`);
+        return resp.data;
+      }
+      catch(e){
+        console.log(e);
+      }
+    },
+
     showNewBookForm() {
       this.book = Object.assign(this.book, {
         title: "",
@@ -126,9 +135,12 @@ export default {
     },
     showUpdateBookForm(index) {
       this.selectedIndex = index;
-      Object.assign(this.book, this.filtredBooks[index]);
-      this.formAction = this.updateBook;
-      this.formVisible = true;
+      this.getBookById(this.filtredBooks[index]._id)
+      .then(book=>{
+        Object.assign(this.book, book );
+        this.formAction = this.updateBook;
+        this.formVisible = true;
+      })
     },
     updateBook() {   
       let i = this.selectedIndex;   

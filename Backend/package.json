@@ -6,7 +6,7 @@
   "scripts": {
     "start": "concurrently \"npm run database\" \"npm run server\"",
     "server": "nodemon --exec babel-node ./src/main.js",
-    "database": "(if not exist data md data ) & \"C:/Program Files/MongoDb/Server/4.2/bin/mongod.exe\" --dbpath data --repair & \"C:/Program Files/MongoDb/Server/4.2/bin/mongod.exe\" --dbpath data",
+    "database": " (if not exist data md data ) & \"C:/Program Files/MongoDb/Server/4.2/bin/mongod.exe\" --dbpath data",
     "init": "concurrently \"npm run database\" \"babel-node ./src/init.js\""
   },
   "dependencies": {
