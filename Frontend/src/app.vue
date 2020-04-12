@@ -1,11 +1,13 @@
 <template>
   <div id="app">
+    <messages v-bind:messagesList="messagesList"></messages>
     <searchString v-model="searchText"></searchString>
     <queryForm v-model="queryObject"></queryForm>
     <input type="button" @click="showNewBookForm()" value=" Додати кнгу" />
     <bookTable v-bind:bookList="filtredBooks" @remove="removeBook" @update="showUpdateBookForm"></bookTable>
 
     <bookForm v-model="book" v-bind:visible="formVisible" @input="formInput"></bookForm>
+    
   </div>
 </template>
 
@@ -14,7 +16,8 @@ import Vue from "vue";
 import bookTable from "./components/bookTable";
 import bookForm from "./components/bookForm";
 import searchString from "./components/searchString";
-import queryForm from "./components/queryForm"
+import queryForm from "./components/queryForm";
+import messages from "./components/messages";
 import axios from "axios";
 
 export default {
@@ -28,8 +31,9 @@ export default {
         isbn: "",
         published: "1997-01-10T22:00:00.000Z",
         pages: 0,
-        price: 0
+        price: 0,        
       },
+      messagesList:[],
       formVisible: false,
       selectedIndex: -1,
       searchText: "",
@@ -44,7 +48,8 @@ export default {
     bookTable,
     bookForm,
     searchString,
-    queryForm
+    queryForm,
+    messages
   },
   computed: {
     filtredBooks() {
@@ -75,6 +80,8 @@ export default {
         return resp.data;
       }catch (e){
         console.log(e);
+        this.messagesList.push(e); 
+        throw e;
       }
     },
     async postBook(book){
@@ -83,6 +90,8 @@ export default {
         return resp.data;
       }catch (e){
         console.log(e);
+        this.messagesList.push(e); 
+        throw e;
       }
     },
     async deleteBook(book){
@@ -91,6 +100,8 @@ export default {
         return resp.data;
       }catch (e){
         console.log(e);
+        this.messagesList.push(e); 
+        reject(e);
       }
     },
      async patchBook(book){
@@ -99,16 +110,8 @@ export default {
         return resp.data;
       }catch (e){
         console.log(e);
-      }
-    },
-
-    async getBookById(id){
-      try{
-        let resp = await axios.get(`http://localhost:5000/book/${id}`);
-        return resp.data;
-      }
-      catch(e){
-        console.log(e);
+        this.messagesList.push(e); 
+        reject(e);
       }
     },
 
@@ -135,12 +138,9 @@ export default {
     },
     showUpdateBookForm(index) {
       this.selectedIndex = index;
-      this.getBookById(this.filtredBooks[index]._id)
-      .then(book=>{
-        Object.assign(this.book, book );
-        this.formAction = this.updateBook;
-        this.formVisible = true;
-      })
+      Object.assign(this.book, this.filtredBooks[index]);
+      this.formAction = this.updateBook;
+      this.formVisible = true;
     },
     updateBook() {   
       let i = this.selectedIndex;   
