@@ -1,4 +1,4 @@
-
+//система для відображення повідомлень
 <template>
     <div class="message" v-if="messages.length>0">
         <p> Непрочитаних повідомлень: {{messages.length}} </p>
