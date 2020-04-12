@@ -1,3 +1,4 @@
+// рядок пошуку 
 <template>
     <form @submit.prevent>
         <input type="text" v-model="searchString">

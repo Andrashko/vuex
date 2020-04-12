@@ -1,7 +1,8 @@
+//редагування ножини 
 <template>
   <div>
     <ul v-if="set.length>0">
-      <li v-for="(element,index) in set" v-bind:key="element">
+      <li v-for="(element, index) in set" v-bind:key="index">
         {{element}}
         <input type="button" @click="remove(index)" value="X">
       </li>
@@ -31,7 +32,9 @@ export default {
   methods: {
     remove(index) {       
         if (confirm(`Ви справді хочете вилучити ${this.set[index]}?`))
-            this.set.splice(index, 1);
+          // робимо мінімальну затримку для того щоб уникнути багу подвійного вилучення  
+            setTimeout(()=>  this.set.splice(index, 1), 100);
+           
     },
     add() {
       console.log(this.newElement);  

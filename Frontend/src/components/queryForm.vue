@@ -1,3 +1,4 @@
+//форма для запитів
 <template>
     <form @submit.prevent>
         Кількість сторінок від <input type="number" v-model.number="query.minPages"> до <input type="number" v-model.number="query.maxPages"> 
@@ -20,12 +21,9 @@ export default {
         reset(){
             this.query.minPages = this.query.maxPages = this.query.maxPrice = null;
             this.$emit("input",this.query);
-            console.log(this.query)
         },
-        search(){
-            
+        search(){            
             this.$emit("input",this.query);
-            console.log(this.query)
         }
     }
 }

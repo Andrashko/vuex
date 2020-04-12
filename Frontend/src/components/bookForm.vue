@@ -1,5 +1,6 @@
+// Форма для відображення книги
 <template>
-    <form v-if="visible" @submit.prevent>
+    <form v-if="visible" @submit.prevent> <!-- якщо форма видима то показати її і відмінити надсилання запиту за замовчуванням-->
         <label> Назва книги <input type="text" v-model="book.title" required> </label> <br>
         <label> Автори <setInput v-model="book.authors"> </setInput></label> <br>
         <label> Дата випуску <input type="date" v-model="book.published"> </label> <br>
@@ -15,7 +16,8 @@ import setInput from "./setInput";
 export default {
     name: "bookForm",
     props:{
-        value:Object,
+        //передача значення в props через value і генерування події input необхідне для коректної роботи v-model компонента
+        value: Object,
         visible: Boolean
     },
     data(){
@@ -28,9 +30,7 @@ export default {
     },
     methods:{
         save(){
-            console.log(this.book)
-            this.$emit('input', this.book);       
-          
+            this.$emit('input', this.book);         
         }
     }
 }

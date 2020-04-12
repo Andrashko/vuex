@@ -1,3 +1,4 @@
+// таблична форма відображення книг
 <template>
     <div>
         <p v-if="bookList.length==0" class="alert">
@@ -42,16 +43,22 @@ export default {
         bookTableRow
     },
     methods:{
+        //сортування по деякому полю (крім авторів)
         sort(field){
            this.bookList.sort((b1,b2)=> b1[field]>=b2[field]?1:-1);
         },
+        //сортування по авторах
         sortAuthor(){
             this.bookList.sort((b1,b2)=>b1.authors.join(",")>=b2.authors.join(",")?1:-1);
         }, 
+        //вилучити внигу
         remove(index){
+            //генруємо подію, вилучення здійснить батьківський компонент
             this.$emit("remove",index);
         },  
+        //оновити книгу
         update(index){
+            //генруємо подію, оеовлення здійснить батьківський компонент
             this.$emit("update",index);
         }
     }
