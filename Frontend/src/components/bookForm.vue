@@ -1,4 +1,4 @@
-// Форма для відображення книги
+// Форма для додавання/редагування книги
 <template>
     <form v-if="visible" @submit.prevent> <!-- якщо форма видима то показати її і відмінити надсилання запиту за замовчуванням-->
         <label> Назва книги <input type="text" v-model="book.title" required> </label> <br>
@@ -6,31 +6,40 @@
         <label> Дата випуску <input type="date" v-model="book.published"> </label> <br>
         <label> Кількість сторінок <input type="number" v-model.number="book.pages" min="0"> </label> <br>
         <label> Ціна <input type="number" v-model.number="book.price" min="0" step="0.01"> </label> <br>  
-        <input type="button" @click="save()" value="Зберегти">     
+        <input type="button" @click="save" value="Зберегти">     
+         <input type="button" @click="hideForm" value="Відміна">   
     </form>
 </template>
 
 <script>
 import setInput from "./setInput";
+import { mapState, mapMutations, mapActions } from 'vuex';
 
 export default {
-    name: "bookForm",
-    props:{
-        //передача значення в props через value і генерування події input необхідне для коректної роботи v-model компонента
-        value: Object,
-        visible: Boolean
-    },
+    name: "bookForm",   
     data(){
-        return{
-            book:this.value,            
+        return{            
         }
     },
     components:{
         setInput
     },
+    computed:{
+        ...mapState({
+            book:"formBook",
+            visible:"formVisible",
+            newMode:"formNewMode"
+        })
+    },
     methods:{
-        save(){
-            this.$emit('input', this.book);         
+        ...mapActions(["patchBook","postBook"]),
+        ...mapMutations(["hideForm"]),
+        async save(){
+            if (this.newMode)
+                await this.postBook(this.book);
+            else
+                await this.patchBook(this.book);    
+            this.hideForm();         
         }
     }
 }

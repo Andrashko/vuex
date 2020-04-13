@@ -7,22 +7,21 @@
     </form>
 </template>
 <script>
-export default {
-    props:{
-        value:String,
-    },
+import {mapMutations} from 'vuex';
+export default {        
     data(){
         return{
-           searchString:this.value     
+           searchString:""   
         }
     },
     methods:{
+        ...mapMutations(["setSerchString"]),
         search(){            
-            this.$emit("input", this.searchString);
+            this.setSerchString(this.searchString);
         },
         clear(){
             this.searchString ="";
-            this.$emit("input", this.searchString);
+            this.setSerchString(this.searchString);
         }
     }
 }

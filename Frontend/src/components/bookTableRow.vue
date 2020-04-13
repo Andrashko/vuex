@@ -1,20 +1,21 @@
 // рядок що відбражає 1 книгу
 <template>
     <tr>        
-        <td> {{index}} </td>
+        <td> {{index+1}} </td>
         <td> {{book.title}} </td>
         <td> {{book.authors?book.authors.join(","):""}} </td>
         <td> {{new Date(book.published).toLocaleDateString()}} </td>
         <td> {{book.pages}} </td>
         <td> {{book.price}} </td>
         <td>
-            <input type="button" value="Вилучити" @click="remove(index)">
-            <input type="button" value="Редагувати" @click="update(index)">
+            <input type="button" value="Вилучити" @click="deleteBook(book)">
+            <input type="button" value="Редагувати" @click="showUpdateForm(book)">
         </td>        
     </tr>
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 export default {
     name:"bookTableRow",
     props:{
@@ -26,14 +27,11 @@ export default {
 
         }
     },
-    methods:{        
-        remove(index){
-            this.$emit("remove", index);
-        },
-  
-        update(index){
-            this.$emit("update",index);
-        }
+    methods:{ 
+        ...mapActions(["deleteBook", "showUpdateForm"]),
+        updated(){
+        console.log(this.book);
+        }            
     }
 }
 </script>

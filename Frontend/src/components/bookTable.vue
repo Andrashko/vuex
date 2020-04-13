@@ -1,25 +1,23 @@
 // таблична форма відображення книг
 <template>
     <div>
-        <p v-if="bookList.length==0" class="alert">
+        <p v-if="books.length==0" class="alert">
             Книги відсутні
         </p>
         
-        <table v-if="bookList.length>0">
+        <table v-if="books.length>0">
             <tr>
                 <th>#</th>
                 <th v-on:click="sort('title')">  Назва </th>
-                <th v-on:click="sortAuthor()"> Автор  </th>
+                <th v-on:click="sort('authors')"> Автор  </th>
                 <th v-on:click="sort('published')">  Дата </th>
                 <th v-on:click="sort('pages')"> Сторінок </th>
                 <th v-on:click="sort('price')"> Ціна </th>
                 <th></th>
             </tr>
-            <bookTableRow v-for="(book,index) in bookList" 
+            <bookTableRow v-for="(book, index) in books" 
                 v-bind:key="book._id" 
-                v-bind="{book,index}"
-                @remove="remove"
-                @update="update" 
+                v-bind="{book, index}"       
             >             
             </bookTableRow>
         </table>
@@ -28,40 +26,29 @@
 
 <script>
 import bookTableRow from "./bookTableRow";
+import { mapGetters, mapMutations} from 'vuex';
+
 
 export default {
-    name:"bookTable",
-    props:{
-        bookList:Array,
-    },
+    name:"bookTable",      
     data(){
-        return{
-           books: this.bookList
+        return{         
+          
         }
     },
     components:{
         bookTableRow
     },
+    computed:{
+       ...mapGetters({
+           books:"filtredBooks"
+       }) 
+    },    
     methods:{
-        //сортування по деякому полю (крім авторів)
-        sort(field){
-           this.bookList.sort((b1,b2)=> b1[field]>=b2[field]?1:-1);
-        },
-        //сортування по авторах
-        sortAuthor(){
-            this.bookList.sort((b1,b2)=>b1.authors.join(",")>=b2.authors.join(",")?1:-1);
-        }, 
-        //вилучити внигу
-        remove(index){
-            //генруємо подію, вилучення здійснить батьківський компонент
-            this.$emit("remove",index);
-        },  
-        //оновити книгу
-        update(index){
-            //генруємо подію, оеовлення здійснить батьківський компонент
-            this.$emit("update",index);
-        }
-    }
+        ...mapMutations({
+            sort:"sortBooks"
+        })
+    }    
 }
 </script>
 
@@ -74,5 +61,6 @@ export default {
     table, table td{
         border-collapse: collapse;
         border: 1px solid black;
+        width: 100%;
     }
 </style>

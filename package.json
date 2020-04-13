@@ -6,7 +6,7 @@
   "scripts": {
     "start": "concurrently \"cd Backend && npm start\" \"cd Frontend && npm start\"",
     "install": "concurrently \"cd Backend && npm install\"  \"cd Frontend && npm install\"",
-    "fix":"cd Backend && \"C:/Program Files/MongoDb/Server/4.2/bin/mongod.exe\" --repair --dbpath data"
+    "fix": "cd Backend && \"C:/Program Files/MongoDb/Server/4.2/bin/mongod.exe\" --repair --dbpath data"
   },
   "dependencies": {
     "concurrently": "^5.1.0"

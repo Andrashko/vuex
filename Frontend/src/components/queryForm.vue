@@ -8,22 +8,25 @@
     </form>
 </template>
 <script>
-export default {
-    props:{
-        value:Object
-    },
+import { mapActions } from 'vuex';
+export default { 
     data(){
         return{
-            query:this.value
+            query: {
+                minPages: null,
+                maxPages: null,
+                maxPrice: null
+            }
         }
     },
     methods:{
+        ...mapActions(["getBooksByQuery"]),
         reset(){
             this.query.minPages = this.query.maxPages = this.query.maxPrice = null;
-            this.$emit("input",this.query);
+            this.getBooksByQuery(this.query);
         },
         search(){            
-            this.$emit("input",this.query);
+            this.getBooksByQuery(this.query);
         }
     }
 }
